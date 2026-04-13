@@ -314,19 +314,34 @@ else
     _fail "permadeath-simulation" "$(cat /tmp/gitgame-perma.log | head -3)"
 fi
 
-# ---- 12c. Loot generator runs deterministically ----
-if python3 - <<'PYEOF' > /dev/null 2>&1
-import subprocess
-out_a = subprocess.check_output(['python', '.claude/scripts/generate-loot.py', 'abc123', '5', '1', 'rare'])
-out_b = subprocess.check_output(['python', '.claude/scripts/generate-loot.py', 'abc123', '5', '1', 'rare'])
+# ---- 12c. Loot generator runs deterministically + output is valid structure ----
+if python3 - <<'PYEOF' > /tmp/gitgame-loot-structure.log 2>&1
+import subprocess, re
+out_a = subprocess.check_output(['python', '.claude/scripts/generate-loot.py', 'abc123', '5', '1', 'rare']).decode()
+out_b = subprocess.check_output(['python', '.claude/scripts/generate-loot.py', 'abc123', '5', '1', 'rare']).decode()
 assert out_a == out_b, 'not deterministic'
-out_c = subprocess.check_output(['python', '.claude/scripts/generate-loot.py', 'abc123', '5', '1', 'legendary'])
-assert b'legendary' in out_c
+out_c = subprocess.check_output(['python', '.claude/scripts/generate-loot.py', 'abc123', '5', '1', 'legendary']).decode()
+assert 'legendary' in out_c
+
+# Structure validation across all rarities
+for rarity in ('common', 'uncommon', 'rare', 'epic', 'legendary'):
+    out = subprocess.check_output(['python', '.claude/scripts/generate-loot.py', 'deadbeef', '7', '3', rarity]).decode()
+    # Must have YAML frontmatter (may be preceded by slug comment)
+    assert re.search(r'^---\n.*?\n---\n', out, re.DOTALL | re.MULTILINE), f'{rarity}: no YAML block'
+    # Must include required YAML fields
+    for f in ('slot:', 'rarity:', 'seed:', 'generated_on:', 'tags:'):
+        assert f in out, f'{rarity}: missing YAML field {f}'
+    # Must have a code block for the 8-line Loot text
+    assert '```' in out, f'{rarity}: no code block'
+    # Must include rarity string
+    assert f'rarity: {rarity}' in out, f'{rarity}: wrong rarity'
+    # Slug comment should be first line
+    assert out.startswith('<!-- slug: '), f'{rarity}: no slug comment'
 PYEOF
 then
-    _pass "loot-generator-deterministic"
+    _pass "loot-generator-output-valid"
 else
-    _fail "loot-generator-deterministic" "see test"
+    _fail "loot-generator-output-valid" "$(cat /tmp/gitgame-loot-structure.log | head -2)"
 fi
 
 # ---- 12. Graveyard is empty or only has .gitkeep (no alive characters should be there) ----
