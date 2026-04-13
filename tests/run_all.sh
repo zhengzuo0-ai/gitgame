@@ -52,6 +52,18 @@ else
     _fail "dice-distribution-uniform" "$(cat /tmp/gitgame-dist.log | head -2)"
 fi
 
+# ---- 1c. All *.sh scripts in .claude/ and tests/ are executable ----
+non_exec=()
+while IFS= read -r script; do
+    [ -f "$script" ] || continue
+    [ -x "$script" ] || non_exec+=("$(basename "$script")")
+done < <(find .claude tests -type f -name '*.sh' 2>/dev/null)
+if [ ${#non_exec[@]} -eq 0 ]; then
+    _pass "shell-scripts-executable"
+else
+    _fail "shell-scripts-executable" "${non_exec[*]}"
+fi
+
 # ---- 2. README update smoke ----
 if bash tests/test_readme_update.sh > /tmp/gitgame-readme.log 2>&1; then
     _pass "readme-update-script"
