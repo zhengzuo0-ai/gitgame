@@ -1,0 +1,19 @@
+# Python bytecode caches
+__pycache__/
+*.pyc
+*.pyo
+
+# OS noise
+.DS_Store
+Thumbs.db
+
+# Editor files
+*.swp
+*.swo
+*~
+
+# Claude Code user-level settings (local overrides)
+.claude/settings.local.json
+
+# Scratch / tmp
+.claude/scratch/
