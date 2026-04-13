@@ -143,6 +143,17 @@ else
     _fail "readme-anchors-all-present" "${anchors_missing[*]}"
 fi
 
+# ---- 11a. CLAUDE.md references all 7 slash commands (docs-impl drift) ----
+cmd_missing_in_rulebook=()
+for c in roll-character skirmish expedition saga rest inventory graveyard; do
+    grep -qE "/${c}\b" CLAUDE.md || cmd_missing_in_rulebook+=("$c")
+done
+if [ ${#cmd_missing_in_rulebook[@]} -eq 0 ]; then
+    _pass "rulebook-mentions-all-commands"
+else
+    _fail "rulebook-mentions-all-commands" "missing: ${cmd_missing_in_rulebook[*]}"
+fi
+
 # ---- 11b. No TODO/FIXME/placeholder in CLAUDE.md, commands, game/World ----
 placeholder_hits=()
 for f in CLAUDE.md .claude/commands/*.md game/World/locations/*.md game/World/npcs/*.md; do
