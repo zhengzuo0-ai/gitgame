@@ -143,6 +143,21 @@ else
     _fail "readme-anchors-all-present" "${anchors_missing[*]}"
 fi
 
+# ---- 11b. No TODO/FIXME/placeholder in CLAUDE.md, commands, game/World ----
+placeholder_hits=()
+for f in CLAUDE.md .claude/commands/*.md game/World/locations/*.md game/World/npcs/*.md; do
+    [ -f "$f" ] || continue
+    # Match common placeholder markers. Allow "TODO:" inside code comments if needed — but we flag all for now.
+    if grep -nE '\b(TODO|FIXME|XXX|占位|待办|TBD)\b' "$f" > /dev/null 2>&1; then
+        placeholder_hits+=("$(basename "$f")")
+    fi
+done
+if [ ${#placeholder_hits[@]} -eq 0 ]; then
+    _pass "no-placeholder-markers"
+else
+    _fail "no-placeholder-markers" "${placeholder_hits[*]}"
+fi
+
 # ---- 12a. Wiki link integrity in game/World/ ----
 broken_links=()
 for f in game/World/locations/*.md game/World/npcs/*.md; do
