@@ -43,6 +43,36 @@ def test_sides_parameter():
         assert 1 <= r <= 100
 
 
+def test_unicode_label():
+    # Chinese labels must work
+    r = roll("abc", 1, "感知-门")
+    assert 1 <= r <= 20
+
+
+def test_empty_label():
+    # Empty label should not crash
+    r = roll("abc", 1, "")
+    assert 1 <= r <= 20
+
+
+def test_long_sha():
+    # Real git SHAs are 40 chars; also test longer strings
+    r = roll("a" * 200, 1, "x")
+    assert 1 <= r <= 20
+
+
+def test_negative_turn():
+    # Edge: negative turn number shouldn't crash (even if never used)
+    r = roll("abc", -1, "x")
+    assert 1 <= r <= 20
+
+
+def test_large_turn():
+    # Saga max is 40; test well beyond
+    r = roll("abc", 10_000_000, "x")
+    assert 1 <= r <= 20
+
+
 if __name__ == "__main__":
     test_deterministic()
     test_range_d20()
@@ -50,4 +80,9 @@ if __name__ == "__main__":
     test_different_labels_differ()
     test_cli_invocation()
     test_sides_parameter()
-    print("OK — all 6 dice tests pass")
+    test_unicode_label()
+    test_empty_label()
+    test_long_sha()
+    test_negative_turn()
+    test_large_turn()
+    print("OK — all 11 dice tests pass")

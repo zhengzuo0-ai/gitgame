@@ -169,6 +169,35 @@ else
     _fail "readme-anchors-all-present" "${anchors_missing[*]}"
 fi
 
+# ---- 11a0. All relative paths mentioned in CLAUDE.md actually exist ----
+claude_paths_bad=()
+# Extract paths like .claude/... or game/... from CLAUDE.md
+while IFS= read -r path; do
+    [ -z "$path" ] && continue
+    # Trim trailing punctuation
+    path="${path%\`}"
+    path="${path%.}"
+    # Accept both exact paths and patterns with <slug> / <name> placeholders
+    if [[ "$path" == *"<"* ]]; then
+        # Skip templated paths — they're docs, not literal paths
+        continue
+    fi
+    # Also skip directory references ending in /
+    if [[ "$path" == */ ]]; then
+        # Check that the directory exists
+        dir_to_check="${path%/}"
+        [ -d "$dir_to_check" ] || claude_paths_bad+=("$path")
+    else
+        # Literal file — must exist
+        [ -e "$path" ] || claude_paths_bad+=("$path")
+    fi
+done < <(grep -oE '(\.claude/[A-Za-z0-9/_.-]+|game/[A-Za-z0-9/_.-]+|samples/[A-Za-z0-9/_.-]+)' CLAUDE.md | sort -u)
+if [ ${#claude_paths_bad[@]} -eq 0 ]; then
+    _pass "rulebook-paths-exist"
+else
+    _fail "rulebook-paths-exist" "${claude_paths_bad[*]:0:5}"
+fi
+
 # ---- 11a. CLAUDE.md references all 7 slash commands (docs-impl drift) ----
 cmd_missing_in_rulebook=()
 for c in roll-character skirmish expedition saga rest inventory graveyard; do
@@ -269,6 +298,13 @@ if [ ${#broken_links[@]} -eq 0 ]; then
     _pass "world-wiki-link-integrity"
 else
     _fail "world-wiki-link-integrity" "${broken_links[*]:0:5}..."
+fi
+
+# ---- 12a2. Character creation simulation (derives attrs from SHA, builds valid card) ----
+if bash tests/test_character_creation_sim.sh > /tmp/gitgame-charsim.log 2>&1; then
+    _pass "character-creation-simulation"
+else
+    _fail "character-creation-simulation" "$(cat /tmp/gitgame-charsim.log | head -3)"
 fi
 
 # ---- 12b. Permadeath end-to-end simulation (move + tag + README + epitaph) ----
