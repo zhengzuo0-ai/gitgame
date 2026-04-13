@@ -203,6 +203,48 @@ else
     _fail "samples-dir-no-drift" "$drift"
 fi
 
+# ---- 11d. location.exits and npc.location reference valid location files ----
+xref_bad=()
+# Build set of valid location slugs
+valid_locs=""
+for f in game/World/locations/*.md; do
+    [ -f "$f" ] || continue
+    valid_locs+="$(basename "$f" .md) "
+done
+
+# Check every NPC's location field
+for f in game/World/npcs/*.md; do
+    [ -f "$f" ] || continue
+    loc_ref=$(awk '/^location:/{sub(/^location:[[:space:]]*/,""); gsub(/^"\[\[|\]\]"$/,""); print; exit}' "$f")
+    if [ -n "$loc_ref" ]; then
+        case " $valid_locs " in
+            *" $loc_ref "*) ;;
+            *) xref_bad+=("$(basename "$f"):location→$loc_ref") ;;
+        esac
+    fi
+done
+
+# Check every location's exits field — extract each wiki-linked slug
+for f in game/World/locations/*.md; do
+    [ -f "$f" ] || continue
+    # exits can be on one line or multi-line. Just grep for [[...]] inside the exits: line.
+    exits_line=$(awk '/^exits:/{print; exit}' "$f")
+    [ -z "$exits_line" ] && continue
+    while IFS= read -r slug; do
+        [ -z "$slug" ] && continue
+        case " $valid_locs " in
+            *" $slug "*) ;;
+            *) xref_bad+=("$(basename "$f"):exits→$slug") ;;
+        esac
+    done < <(echo "$exits_line" | grep -oE '\[\[[^]]+\]\]' | sed 's/\[\[//; s/\]\]//; s/|.*//')
+done
+
+if [ ${#xref_bad[@]} -eq 0 ]; then
+    _pass "world-xref-integrity"
+else
+    _fail "world-xref-integrity" "${xref_bad[*]:0:5}"
+fi
+
 # ---- 12a. Wiki link integrity in game/World/ ----
 broken_links=()
 for f in game/World/locations/*.md game/World/npcs/*.md; do
