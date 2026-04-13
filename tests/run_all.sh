@@ -143,6 +143,32 @@ else
     _fail "readme-anchors-all-present" "${anchors_missing[*]}"
 fi
 
+# ---- 12a. Wiki link integrity in game/World/ ----
+broken_links=()
+for f in game/World/locations/*.md game/World/npcs/*.md; do
+    [ -f "$f" ] || continue
+    # Extract all [[slug]] references — strip aliases after |
+    while IFS= read -r link; do
+        [ -z "$link" ] && continue
+        slug=$(echo "$link" | sed 's/|.*//; s/\.md$//')
+        # Search for a file with this slug (as filename base) in known locations
+        found=0
+        for base in game/World/locations game/World/npcs game/Characters game/Graveyard game/Loot; do
+            [ -f "${base}/${slug}.md" ] && found=1 && break
+        done
+        # Also allow matches against samples/ loot files (legacy refs)
+        if [ "$found" -eq 0 ]; then
+            find samples -name "${slug}.md" 2>/dev/null | grep -q . && found=1
+        fi
+        [ "$found" -eq 0 ] && broken_links+=("$(basename "$f")→[[${slug}]]")
+    done < <(grep -oE '\[\[[^]]+\]\]' "$f" | sed 's/\[\[//; s/\]\]//')
+done
+if [ ${#broken_links[@]} -eq 0 ]; then
+    _pass "world-wiki-link-integrity"
+else
+    _fail "world-wiki-link-integrity" "${broken_links[*]:0:5}..."
+fi
+
 # ---- 12. Graveyard is empty or only has .gitkeep (no alive characters should be there) ----
 grave_bad=$(find game/Graveyard -maxdepth 1 -type f -name '*.md' ! -name '.gitkeep' 2>/dev/null | xargs -I{} grep -L '^tags:.*dead' {} 2>/dev/null)
 if [ -z "$grave_bad" ]; then
