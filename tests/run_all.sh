@@ -26,6 +26,32 @@ else
     _fail "dice-unit-tests" "$(cat /tmp/gitgame-dice.log)"
 fi
 
+# ---- 1b. Dice distribution uniformity (10000 samples, χ² approximation) ----
+if python3 - <<'PYEOF' > /tmp/gitgame-dist.log 2>&1
+import sys, os
+sys.path.insert(0, '.claude/scripts')
+from dice import roll
+N = 10000
+counts = [0] * 21  # index 1..20
+for i in range(N):
+    r = roll("uniformity-test", i, "dist", sides=20)
+    counts[r] += 1
+# Expect ~500 per face. Max deviation check: each face within ±20% of expected.
+expected = N / 20  # 500
+maxdev = max(abs(c - expected) / expected for c in counts[1:])
+if maxdev > 0.20:
+    raise SystemExit(f"max deviation {maxdev:.2%} exceeds 20% tolerance; counts={counts[1:]}")
+# Also check all 20 faces showed up
+missing = [i for i in range(1, 21) if counts[i] == 0]
+if missing:
+    raise SystemExit(f"faces never rolled: {missing}")
+PYEOF
+then
+    _pass "dice-distribution-uniform"
+else
+    _fail "dice-distribution-uniform" "$(cat /tmp/gitgame-dist.log | head -2)"
+fi
+
 # ---- 2. README update smoke ----
 if bash tests/test_readme_update.sh > /tmp/gitgame-readme.log 2>&1; then
     _pass "readme-update-script"
