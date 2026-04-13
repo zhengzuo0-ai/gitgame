@@ -195,6 +195,14 @@ else
     _fail "no-placeholder-markers" "${placeholder_hits[*]}"
 fi
 
+# ---- 11c. samples/ is clean (no uncommitted drift in the read-only reference dir) ----
+drift=$(git status --porcelain samples/ 2>/dev/null | head -5)
+if [ -z "$drift" ]; then
+    _pass "samples-dir-no-drift"
+else
+    _fail "samples-dir-no-drift" "$drift"
+fi
+
 # ---- 12a. Wiki link integrity in game/World/ ----
 broken_links=()
 for f in game/World/locations/*.md game/World/npcs/*.md; do
