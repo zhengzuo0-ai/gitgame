@@ -181,6 +181,65 @@ else
     _fail "readme-anchors-all-present" "${anchors_missing[*]}"
 fi
 
+# ---- 11a00. All .md files with frontmatter have STRICTLY valid YAML ----
+if python3 - <<'PYEOF' > /tmp/gitgame-yaml.log 2>&1
+import sys, os, re
+# Lightweight YAML validator without PyYAML dep — uses a subset parser.
+# For strictness, try PyYAML first; fall back to basic sanity if unavailable.
+try:
+    import yaml
+    yaml_available = True
+except ImportError:
+    yaml_available = False
+
+def extract_frontmatter(path):
+    with open(path) as f:
+        content = f.read()
+    m = re.match(r'^(?:<!--[^>]*-->\s*)?---\n(.*?)\n---', content, re.DOTALL)
+    if not m:
+        return None
+    return m.group(1)
+
+bad = []
+targets = []
+for root, dirs, files in os.walk('.'):
+    # Skip external / staged dirs
+    if any(s in root for s in ('.git', 'node_modules', 'samples', '/tmp', 'staging')):
+        continue
+    for fn in files:
+        if fn.endswith('.md'):
+            targets.append(os.path.join(root, fn))
+
+for p in targets:
+    fm = extract_frontmatter(p)
+    if fm is None:
+        continue
+    if yaml_available:
+        try:
+            d = yaml.safe_load(fm)
+            if not isinstance(d, dict):
+                bad.append(f"{p}: frontmatter not a mapping")
+        except yaml.YAMLError as e:
+            bad.append(f"{p}: {e}")
+    else:
+        # Fallback: ensure every non-empty line starts with space or `key:` or `-`
+        for lineno, line in enumerate(fm.split('\n'), 1):
+            if not line.strip():
+                continue
+            if not re.match(r'^(\s+|-\s|[A-Za-z_][\w-]*:)', line):
+                bad.append(f"{p}:{lineno}: suspicious line: {line!r}")
+                break
+
+if bad:
+    print("\n".join(bad[:5]))
+    sys.exit(1)
+PYEOF
+then
+    _pass "all-frontmatter-valid-yaml"
+else
+    _fail "all-frontmatter-valid-yaml" "$(cat /tmp/gitgame-yaml.log | head -3)"
+fi
+
 # ---- 11a0. All relative paths mentioned in CLAUDE.md actually exist ----
 claude_paths_bad=()
 # Extract paths like .claude/... or game/... from CLAUDE.md
