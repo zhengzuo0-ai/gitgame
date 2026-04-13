@@ -195,6 +195,28 @@ else
     _fail "world-wiki-link-integrity" "${broken_links[*]:0:5}..."
 fi
 
+# ---- 12b. Permadeath end-to-end simulation (move + tag + README + epitaph) ----
+if bash tests/test_permadeath_sim.sh > /tmp/gitgame-perma.log 2>&1; then
+    _pass "permadeath-simulation"
+else
+    _fail "permadeath-simulation" "$(cat /tmp/gitgame-perma.log | head -3)"
+fi
+
+# ---- 12c. Loot generator runs deterministically ----
+if python3 - <<'PYEOF' > /dev/null 2>&1
+import subprocess
+out_a = subprocess.check_output(['python', '.claude/scripts/generate-loot.py', 'abc123', '5', '1', 'rare'])
+out_b = subprocess.check_output(['python', '.claude/scripts/generate-loot.py', 'abc123', '5', '1', 'rare'])
+assert out_a == out_b, 'not deterministic'
+out_c = subprocess.check_output(['python', '.claude/scripts/generate-loot.py', 'abc123', '5', '1', 'legendary'])
+assert b'legendary' in out_c
+PYEOF
+then
+    _pass "loot-generator-deterministic"
+else
+    _fail "loot-generator-deterministic" "see test"
+fi
+
 # ---- 12. Graveyard is empty or only has .gitkeep (no alive characters should be there) ----
 grave_bad=$(find game/Graveyard -maxdepth 1 -type f -name '*.md' ! -name '.gitkeep' 2>/dev/null | xargs -I{} grep -L '^tags:.*dead' {} 2>/dev/null)
 if [ -z "$grave_bad" ]; then
