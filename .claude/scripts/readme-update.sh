@@ -36,17 +36,25 @@ if [ -z "$alive_block" ]; then
     alive_block="_(无人在世。\`/roll-character\` 开始新人生。)_"$'\n'
 fi
 
-# Build FALLEN block (newest first)
+# Build FALLEN block (newest first by mtime)
 fallen_block=""
-for f in $(ls -t game/Graveyard/*.md 2>/dev/null || true); do
+fallen_files=()
+for f in game/Graveyard/*.md; do
+    [ -f "$f" ] || continue
     [ "$(basename "$f")" = ".gitkeep" ] && continue
-    slug=$(basename "$f" .md)
-    died_on=$(_yaml_field "$f" died_on)
-    died_in=$(_yaml_field "$f" died_in)
-    [ -z "$died_on" ] && died_on="?"
-    [ -z "$died_in" ] && died_in="?"
-    fallen_block+="- [[${slug}]] · died ${died_on} in ${died_in}"$'\n'
+    fallen_files+=("$f")
 done
+if [ ${#fallen_files[@]} -gt 0 ]; then
+    # Sort by mtime desc
+    while IFS= read -r f; do
+        slug=$(basename "$f" .md)
+        died_on=$(_yaml_field "$f" died_on)
+        died_in=$(_yaml_field "$f" died_in)
+        [ -z "$died_on" ] && died_on="?"
+        [ -z "$died_in" ] && died_in="?"
+        fallen_block+="- [[${slug}]] · died ${died_on} in ${died_in}"$'\n'
+    done < <(printf '%s\n' "${fallen_files[@]}" | xargs -d '\n' ls -t)
+fi
 if [ -z "$fallen_block" ]; then
     fallen_block="_(无人殒命。)_"$'\n'
 fi
