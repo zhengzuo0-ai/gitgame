@@ -1,4 +1,43 @@
 {
+  "permissions": {
+    "allow": [
+      "Bash(python3 .claude/scripts/dice.py*)",
+      "Bash(python3 .claude/scripts/generate-loot.py*)",
+      "Bash(bash .claude/scripts/readme-update.sh)",
+      "Bash(git add*)",
+      "Bash(git commit*)",
+      "Bash(git tag*)",
+      "Bash(git rev-parse*)",
+      "Bash(git mv*)",
+      "Bash(git log*)",
+      "Bash(git diff*)",
+      "Bash(git status*)",
+      "Bash(bash .claude/hooks/session-start.sh)",
+      "Bash(ls game/*)",
+      "Read(game/**)",
+      "Read(.claude/**)",
+      "Read(CLAUDE.md)",
+      "Read(README.md)",
+      "Read(samples/**)",
+      "Edit(game/Characters/*)",
+      "Edit(game/Expeditions/*)",
+      "Edit(game/Loot/*)",
+      "Edit(game/World/**)",
+      "Edit(game/Journal/*)",
+      "Edit(README.md)",
+      "Write(game/Characters/*)",
+      "Write(game/Expeditions/*)",
+      "Write(game/Loot/*)",
+      "Write(game/World/**)",
+      "Write(game/Journal/*)"
+    ],
+    "deny": [
+      "Edit(game/Graveyard/*)",
+      "Write(game/Graveyard/*)",
+      "Bash(rm game/Graveyard/*)",
+      "Bash(git tag -d death/*)"
+    ]
+  },
   "hooks": {
     "SessionStart": [
       {
