@@ -20,7 +20,7 @@ _fail() {
 }
 
 # ---- 1. Dice unit tests ----
-if python tests/test_dice.py > /tmp/gitgame-dice.log 2>&1; then
+if python3 tests/test_dice.py > /tmp/gitgame-dice.log 2>&1; then
     _pass "dice-unit-tests"
 else
     _fail "dice-unit-tests" "$(cat /tmp/gitgame-dice.log)"
@@ -101,7 +101,7 @@ else
 fi
 
 # ---- 6. dice.py runs with CLI forms ----
-if python .claude/scripts/dice.py abc123 1 test > /tmp/gitgame-cli.log 2>&1; then
+if python3 .claude/scripts/dice.py abc123 1 test > /tmp/gitgame-cli.log 2>&1; then
     OUT=$(cat /tmp/gitgame-cli.log)
     if [[ "$OUT" =~ ^[0-9]+$ ]] && [ "$OUT" -ge 1 ] && [ "$OUT" -le 20 ]; then
         _pass "dice-cli-4arg-form"
@@ -388,15 +388,15 @@ fi
 # ---- 12c. Loot generator runs deterministically + output is valid structure ----
 if python3 - <<'PYEOF' > /tmp/gitgame-loot-structure.log 2>&1
 import subprocess, re
-out_a = subprocess.check_output(['python', '.claude/scripts/generate-loot.py', 'abc123', '5', '1', 'rare']).decode()
-out_b = subprocess.check_output(['python', '.claude/scripts/generate-loot.py', 'abc123', '5', '1', 'rare']).decode()
+out_a = subprocess.check_output(['python3', '.claude/scripts/generate-loot.py', 'abc123', '5', '1', 'rare']).decode()
+out_b = subprocess.check_output(['python3', '.claude/scripts/generate-loot.py', 'abc123', '5', '1', 'rare']).decode()
 assert out_a == out_b, 'not deterministic'
-out_c = subprocess.check_output(['python', '.claude/scripts/generate-loot.py', 'abc123', '5', '1', 'legendary']).decode()
+out_c = subprocess.check_output(['python3', '.claude/scripts/generate-loot.py', 'abc123', '5', '1', 'legendary']).decode()
 assert 'legendary' in out_c
 
 # Structure validation across all rarities
 for rarity in ('common', 'uncommon', 'rare', 'epic', 'legendary'):
-    out = subprocess.check_output(['python', '.claude/scripts/generate-loot.py', 'deadbeef', '7', '3', rarity]).decode()
+    out = subprocess.check_output(['python3', '.claude/scripts/generate-loot.py', 'deadbeef', '7', '3', rarity]).decode()
     # Must have YAML frontmatter (may be preceded by slug comment)
     assert re.search(r'^---\n.*?\n---\n', out, re.DOTALL | re.MULTILINE), f'{rarity}: no YAML block'
     # Must include required YAML fields

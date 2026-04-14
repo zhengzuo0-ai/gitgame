@@ -17,10 +17,10 @@ cleanup() {
 trap cleanup EXIT
 
 # 1. Derive attributes via dice.py from fake SHA
-BODY=$(python .claude/scripts/dice.py "$FAKE_SHA" 1 attr-body)
-MIND=$(python .claude/scripts/dice.py "$FAKE_SHA" 1 attr-mind)
-EDGE=$(python .claude/scripts/dice.py "$FAKE_SHA" 1 attr-edge)
-LUCK=$(python .claude/scripts/dice.py "$FAKE_SHA" 1 attr-luck)
+BODY=$(python3 .claude/scripts/dice.py "$FAKE_SHA" 1 attr-body)
+MIND=$(python3 .claude/scripts/dice.py "$FAKE_SHA" 1 attr-mind)
+EDGE=$(python3 .claude/scripts/dice.py "$FAKE_SHA" 1 attr-edge)
+LUCK=$(python3 .claude/scripts/dice.py "$FAKE_SHA" 1 attr-luck)
 
 # Map 1..20 to 1..5 per CLAUDE.md rule
 BODY_MAPPED=$(( (BODY - 1) % 5 + 1 ))
@@ -96,7 +96,7 @@ if ! grep -q 'tags:.*character.*alive' "$CARD"; then
 fi
 
 # 3f. Determinism: same SHA produces same attributes
-BODY2=$(python .claude/scripts/dice.py "$FAKE_SHA" 1 attr-body)
+BODY2=$(python3 .claude/scripts/dice.py "$FAKE_SHA" 1 attr-body)
 if [ "$BODY" != "$BODY2" ]; then
     echo "FAIL: dice non-deterministic ($BODY vs $BODY2)"; EXIT=1
 fi

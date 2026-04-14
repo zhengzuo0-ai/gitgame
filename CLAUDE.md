@@ -81,7 +81,7 @@
 1. 运行 `git rev-parse HEAD` 取当前 SHA（记住它，本回合内复用）。
 2. 对每次判定调用：
    ```bash
-   python .claude/scripts/dice.py <SHA> <turn> <label>
+   python3 .claude/scripts/dice.py <SHA> <turn> <label>
    ```
    得到一个 1–20 的整数。
 3. **label 命名规则**（固定命名空间）：

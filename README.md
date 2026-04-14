@@ -53,7 +53,7 @@ _(无人殒命。)_
 ## 骰子是真的随机
 
 每次判定的 seed = `<当前 HEAD SHA>:<回合数>:<label>`。
-玩家可以 `git log` 查到每回合的 SHA，`python .claude/scripts/dice.py <SHA> <turn> <label>` 复算，必得同样的点数。
+玩家可以 `git log` 查到每回合的 SHA，`python3 .claude/scripts/dice.py <SHA> <turn> <label>` 复算，必得同样的点数。
 **GM 不能编骰点。**
 
 ---

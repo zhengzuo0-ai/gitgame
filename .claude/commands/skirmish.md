@@ -41,7 +41,7 @@ Arguments: $ARGUMENTS — location slug (e.g., `ember-pass`). Required.
 3. Decide what judgments are needed. Typical encounter: 1–3 rolls per turn.
 4. For each roll:
    - Choose label from namespace: `perceive-<obj>` / `attack-<enemy>-<N>` / `defend-<enemy>-<N>` / `save-<situation>` / `talk-<npc>`.
-   - `d20 = python .claude/scripts/dice.py $SHA $N <label>`
+   - `d20 = python3 .claude/scripts/dice.py $SHA $N <label>`
    - Total = d20 + relevant attribute.
    - DC from CLAUDE.md table (10 simple, 13 standard — skirmish stays in this range).
    - Output forced line: `` `[<Attr> <val> + d20=<d20> = <total> vs DC <dc>] 成功|失败` ``
@@ -64,14 +64,14 @@ Arguments: $ARGUMENTS — location slug (e.g., `ember-pass`). Required.
 ## Resolution (if survived)
 
 1. Write `## 结算` section with: turns survived, HP remaining, summary.
-2. **Loot roll**: `loot_d20 = python .claude/scripts/dice.py $SHA 99 loot-drop`
+2. **Loot roll**: `loot_d20 = python3 .claude/scripts/dice.py $SHA 99 loot-drop`
    - 1..10 → no loot
    - 11..18 → 1 common item
    - 19..20 → 1 uncommon item
    - For each item, generate 8-line Loot text using `.claude/scripts/loot-seeds.json`:
-     - slot: `python .claude/scripts/dice.py $SHA 99 loot-slot` mod 8 → index into slots[]
-     - prefix: `python .claude/scripts/dice.py $SHA 99 loot-prefix` mod 20
-     - suffix: `python .claude/scripts/dice.py $SHA 99 loot-suffix` mod 20
+     - slot: `python3 .claude/scripts/dice.py $SHA 99 loot-slot` mod 8 → index into slots[]
+     - prefix: `python3 .claude/scripts/dice.py $SHA 99 loot-prefix` mod 20
+     - suffix: `python3 .claude/scripts/dice.py $SHA 99 loot-suffix` mod 20
      - 3 attribute lines: pick 3 distinct indexes similarly
    - Write `game/Loot/<item-slug>.md` with YAML + 8 lines + 40–80 char flavor paragraph.
 3. **XP**: skirmish gives 15–30 XP based on turns + outcome.

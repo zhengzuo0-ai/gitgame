@@ -14,15 +14,15 @@ Arguments: $ARGUMENTS (optional — unused for now; future: class preference)
    - Run `git rev-parse HEAD` → save as `SHA`.
 
 2. **Derive attributes deterministically**
-   - body  = `python .claude/scripts/dice.py $SHA 1 attr-body`  mod 5 + 1
-   - mind  = `python .claude/scripts/dice.py $SHA 1 attr-mind`  mod 5 + 1
-   - edge  = `python .claude/scripts/dice.py $SHA 1 attr-edge`  mod 5 + 1
-   - luck  = `python .claude/scripts/dice.py $SHA 1 attr-luck`  mod 5 + 1
+   - body  = `python3 .claude/scripts/dice.py $SHA 1 attr-body`  mod 5 + 1
+   - mind  = `python3 .claude/scripts/dice.py $SHA 1 attr-mind`  mod 5 + 1
+   - edge  = `python3 .claude/scripts/dice.py $SHA 1 attr-edge`  mod 5 + 1
+   - luck  = `python3 .claude/scripts/dice.py $SHA 1 attr-luck`  mod 5 + 1
    - (Map dice.py's 1..20 output to 1..5 via `((d-1) % 5) + 1`.)
 
 3. **Derive starter roll & class**
-   - starter = `python .claude/scripts/dice.py $SHA 1 starter-roll`  (1..20 directly)
-   - class_roll = `python .claude/scripts/dice.py $SHA 1 class-roll`
+   - starter = `python3 .claude/scripts/dice.py $SHA 1 starter-roll`  (1..20 directly)
+   - class_roll = `python3 .claude/scripts/dice.py $SHA 1 class-roll`
      - 1..7  → Wandering Scholar
      - 8..13 → Lantern-Bearer
      - 14..17 → Ashen Soldier
@@ -35,7 +35,7 @@ Arguments: $ARGUMENTS (optional — unused for now; future: class preference)
 
 5. **Grant starter relic if starter ≥ 18**
    - `ls samples/01-loot-relics/Relics/*.md` → pick one deterministically:
-     `index = python .claude/scripts/dice.py $SHA 1 starter-relic`  mod N
+     `index = python3 .claude/scripts/dice.py $SHA 1 starter-relic`  mod N
    - Copy it to `game/Loot/<orig-slug>.md` (overwrite `owner` YAML field if present).
    - Add to new character's `inventory: ["[[<slug>]]"]`.
 

@@ -53,7 +53,7 @@ if [ ${#fallen_files[@]} -gt 0 ]; then
         [ -z "$died_on" ] && died_on="?"
         [ -z "$died_in" ] && died_in="?"
         fallen_block+="- [[${slug}]] · died ${died_on} in ${died_in}"$'\n'
-    done < <(printf '%s\n' "${fallen_files[@]}" | xargs -d '\n' ls -t)
+    done < <(printf '%s\0' "${fallen_files[@]}" | xargs -0 ls -t)
 fi
 if [ -z "$fallen_block" ]; then
     fallen_block="_(无人殒命。)_"$'\n'
