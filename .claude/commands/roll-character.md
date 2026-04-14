@@ -85,6 +85,21 @@ Arguments: $ARGUMENTS (optional — unused for now; future: class preference)
    - Show the full card (name, class, attrs, HP, origin prose)
    - Ask: "要去哪？`/skirmish [地点]` / `/expedition [地点]` / `/rest`"
 
+10. **Onboarding nudge — first character only**
+    - Detect "first character ever" = `game/Graveyard/` is empty (only `.gitkeep`) **and** this is the only file
+      in `game/Characters/` after step 6.
+    - If so, after the greeting, append **exactly three short sentences** (no headers, no bullet points,
+      keep the same diegetic tone — like a quiet aside, not a tutorial pop-up):
+
+      ```
+      你可以用自然语言告诉我你想做什么——「我推开门」「我朝守墓人喊一声」都行，不必背命令。
+      四个属性 body / mind / edge / luck 是判定时的加成；高的那个对应你擅长的方向。
+      死亡是永久的——没有读档，没有"再来一次"。
+      ```
+
+    - **Do NOT** show this for second-and-onward characters. Returning players know the rules; the inheritance
+      step (5b) and the heavier session-start tone are enough signal.
+
 ## Style
 
 - Output is terminal-rendered. Use headers, bold, bullets sparingly.
