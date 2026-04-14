@@ -129,6 +129,25 @@ GM 在每次需要骰子前先选定**类型**，写在 label 上以便审计：
 
 ---
 
+## 升级规则
+
+当 `xp >= xp_to_next` 时，结算段（冒险结尾或 `/rest` 时）触发升级。
+
+1. **level += 1**
+2. **xp -= 旧 xp_to_next**（结转余数）
+3. **xp_to_next 递增**：`new = old + 200`（所以 L1→L2 需 300，L2→L3 需 500，L3→L4 需 700）
+4. **属性 +1**：GM 根据本轮升级动作叙事合理性**选一个**属性 +1（不问玩家，由 GM 裁决；优先跟随最近几次冒险里该角色**成功做过**的事情——多用 Mind 就 Mind+1，多用 Edge 就 Edge+1）。记在升级段。
+5. **hp_max += 1**，hp 同步补满到新 hp_max（升级时短暂治愈效果）
+6. 在结算段显式写出 4 行：
+   ```
+   **薛迟升至第二级。**
+   - 属性 +1: mind 4 → 5（判断力在这一段冒险里起了决定作用）
+   - hp_max +1: 11 → 12
+   - xp: 148 + 218 = 366，结转 66
+   ```
+
+---
+
 ## Status Effect 分级
 
 每个 status 必须落在四档之一，写在角色卡 `status: [...]` 时**带后缀**：
@@ -217,11 +236,34 @@ attributes:
 inventory: []         # wiki link 到 game/Loot/*.md
 gold: 0
 expeditions_survived: 0
+scars: []             # 永久伤疤，每项 {cause, effect, acquired_on}
+notoriety: 0          # 声誉计数，镇上被见、官府留档累加
 created: YYYY-MM-DD
 last_played: YYYY-MM-DD
+last_rested: YYYY-MM-DD
+last_seen_at: "[[<location-slug>]]"  # /rest 默认参数，冒险结算时刷新
 tags: [character, alive]
 ---
 ```
+
+**Scar 子结构** — 当 HP 单回合跌破 max/3 时，结算段掷 `Luck + d20 vs DC 13`；失败则加一条 scar：
+
+```yaml
+scars:
+  - cause: "弓石镇仓皇出镇"
+    effect: "body -1 perm"       # 或 "edge -1 perm" / "hp_max -1 perm"
+    acquired_on: 2026-04-14
+```
+
+Scar 的 `effect` 永久叠加到相应属性/HP max（和 `-perm` status 不同的是：scar 是伤疤叙事，status 是状态；scar 不可通过任何手段解除）。
+
+**Notoriety 效应**：
+- 0-2：无效果
+- 3-5：在 **被记住地区** 的 NPC 判定 DC +1
+- 6-9：**镇里** 会有人主动认出你，部分 NPC 拒绝交易
+- 10+：通缉——主城里有巡察，某些地点 `state: hostile`
+
+Notoriety 每满 3 的档位，GM 在 `game/World/rumors/` 新增一条关于该角色的流言。
 
 **死亡角色** 在归档时改 `tags: [character, dead]`，新增字段：
 
@@ -233,7 +275,16 @@ turns_survived: <N>
 final_hp: <负数，显示打过底的程度>
 ```
 
-**战利品** `game/Loot/<slug>.md` 必须是 8 行 Loot 格式 + 一段 ≤ 80 字风味：
+**战利品** `game/Loot/<slug>.md` 必须是 8 行 Loot 格式 + 一段 ≤ 80 字风味。
+生成时 **一律** 使用 `generate-loot.py --write --acquired-from <loc-slug>`，一次调用直接落盘 + 返回 slug：
+
+```bash
+SLUG=$(bash .claude/scripts/py.sh .claude/scripts/generate-loot.py \
+       $SHA $TURN $IDX $RARITY --write --acquired-from $LOC)
+```
+
+YAML 包含 `mechanical: <attr> +<n>` 字段（生成器自动填入）——GM 在相关判定时读取此字段给加成。每件装备**最多贡献一条 mechanical 线**；多件同属性加成**可叠加**。
+
 
 ```
 Name of the Item
