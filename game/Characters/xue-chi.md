@@ -7,7 +7,7 @@ xp: 66
 xp_to_next: 500
 hp: 11
 hp_max: 11
-status: []
+status: ["shaken-light"]
 attributes:
   body: 1
   mind: 4
