@@ -39,6 +39,25 @@ Arguments: $ARGUMENTS (optional — unused for now; future: class preference)
    - Copy it to `game/Loot/<orig-slug>.md` (overwrite `owner` YAML field if present).
    - Add to new character's `inventory: ["[[<slug>]]"]`.
 
+5b. **Inheritance from the most recent grave** (if `game/Graveyard/` is non-empty)
+   - Pick the most recently buried character: `ls -t game/Graveyard/*.md | head -1` (skip `.gitkeep`).
+   - Generate **one common-tier item** via `generate-loot.py`:
+     ```bash
+     bash .claude/scripts/py.sh .claude/scripts/generate-loot.py $SHA 1 99 common
+     ```
+   - Write to `game/Loot/<slug>.md`, then patch the YAML to add:
+     - `inherited_from: "[[<previous-character-slug>]]"`
+     - `acquired_at: <today>`
+     - `acquired_from: "graveyard"`
+   - Append `[[<slug>]]` to new character's `inventory`.
+   - In the origin paragraph, mention this item exists and how the new character came by it
+     (a stranger pressed it into their hand at the inn / they found it tied to a marker stone /
+     it was in a bundle a traveler left). **Do not** name the dead character — let the player
+     find that thread themselves by reading the grave.
+
+   This is the only allowed link between graves and new lives. It is **not** resurrection;
+   it is a single common object passing forward, the way real estates do.
+
 6. **Write character file**
    - Path: `game/Characters/<name-slug>.md`
    - slug = lowercase, spaces → hyphens, no punctuation

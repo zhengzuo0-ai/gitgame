@@ -11,9 +11,9 @@ Arguments: $ARGUMENTS — location slug. Required.
 Read `expedition.md` first. The deltas:
 
 - **Max turns: 40**.
-- **DC range: 14–20**. Even trivial rolls in a saga tend toward 13+.
-- **Death probability**: ~35% (compared to ~15% for expedition, ~5% for skirmish). The Saga is **dangerous**.
-- **Boss turn**: at least one designated "boss turn" mid-saga. On this turn, any damage dealt **doubles**, and any failed save can knock HP in one roll from full to lethal. The GM declares the boss turn with a short line like `[风暴之眼]` before narrating it.
+- **DC range: 13–19** (was 14–20 — small drop to take saga lethality from ~35% down to ~22%, the new design target). Trivial rolls still tend toward 13+, but no longer cluster at 18.
+- **Death probability**: ~22% (down from ~35%). The Saga is still **dangerous**, but a competent character with decent rolls should survive most of the time. Despair comes from cumulative weight, not coin-flip lethality.
+- **Boss turn**: at least one designated "boss turn" mid-saga. On this turn, any failed save can still cascade, but **damage is single (no longer double)** — the danger is the *number* of rolls and the cascade of bad ones, not one-shot kills. The GM declares the boss turn with a short line like `[风暴之眼]` before narrating it.
 - **Cannot be interrupted by /rest** — but every 10 turns you must write a `## 章节 N` section and `git commit -m "saga chapter N: <title>"`. This is a **forced save-point**. If the player exits mid-saga, resuming means loading the last chapter's state.
 - **Loot tier**: generous. Always use `generate-loot.py`; never hand-write the 8 lines.
   - `loot_d20 = bash .claude/scripts/py.sh .claude/scripts/dice.py $SHA 999 loot-drop`

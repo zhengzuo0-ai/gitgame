@@ -46,6 +46,10 @@ Steps (in order, do not skip):
      - `killed_by: <specific cause — npc slug, trap kind, or environmental>`
      - `turns_survived: <turn number>`
      - `final_hp: <negative number; the overkill is informative>`
+     - `last_words: "<≤15 中文字符>"` — what the character said or thought at the moment of death.
+       Keep it concrete and short. Examples: `"我应该往左。"` / `"母亲。"` / `"原来是真的。"` /
+       `"……"` (silence is allowed). **Hard cap 15 characters**, no exceptions. If they died
+       too fast to think, write the last sensation in 15 chars: `"灯还在烧。"`.
 
 4. **Generate epitaph**
    - Append a `## 墓志铭` section at the end of the file.

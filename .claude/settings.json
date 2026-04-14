@@ -1,4 +1,37 @@
 {
+  "permissions": {
+    "allow": [
+      "Bash(git rev-parse:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git tag:*)",
+      "Bash(git mv:*)",
+      "Bash(git status:*)",
+      "Bash(git log:*)",
+      "Bash(git diff:*)",
+      "Bash(git config:*)",
+      "Bash(git checkout:*)",
+      "Bash(git init:*)",
+      "Bash(bash .claude/scripts/py.sh:*)",
+      "Bash(bash .claude/scripts/readme-update.sh:*)",
+      "Bash(bash .claude/scripts/generate-loot.py:*)",
+      "Bash(bash .claude/scripts/dice.py:*)",
+      "Bash(bash .claude/hooks/session-start.sh:*)",
+      "Bash(bash tests/run_all.sh:*)",
+      "Bash(bash install.sh:*)",
+      "Bash(date:*)",
+      "Bash(ls game:*)",
+      "Bash(ls game/*:*)",
+      "Bash(ls .claude:*)",
+      "Bash(cat game/*:*)",
+      "Bash(awk:*)",
+      "Bash(grep:*)",
+      "Bash(sed:*)",
+      "Bash(find game:*)",
+      "Bash(mkdir -p game:*)",
+      "Bash(cp samples:*)"
+    ]
+  },
   "hooks": {
     "SessionStart": [
       {
