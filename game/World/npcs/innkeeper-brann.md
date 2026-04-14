@@ -4,8 +4,8 @@ slug: innkeeper-brann
 location: "[[south-marches-village]]"
 disposition: neutral-friendly
 role: innkeeper
-known_to: []
-first_met_on: null
+known_to: ["[[xue-chi]]"]
+first_met_on: 2026-04-14
 attributes:
   patience: 7
   insight: 5
