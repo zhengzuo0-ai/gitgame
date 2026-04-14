@@ -29,6 +29,8 @@ if [ "$alive_count" -eq 0 ]; then
         echo ""
         echo "  还没有英雄。"
         echo "  → /roll-character  孵化第一位"
+        echo ""
+        echo "  初次？ /skirmish 3分钟小战 · /expedition 30分钟探险 · /saga 60分钟史诗"
     fi
 else
     # List alive characters

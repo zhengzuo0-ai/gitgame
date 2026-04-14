@@ -32,6 +32,7 @@ Arguments: $ARGUMENTS (optional — unused for now; future: class preference)
    - Name: 2–3 Chinese characters OR a Western name (you choose by class feel).
    - Origin: 3 sentences max. Where they came from, what they lost, one specific memory.
    - Tone: cold, understated. No "chosen one" tropes.
+   - If `game/Graveyard/` is non-empty, weave one subtle reference to a fallen character into the origin (see CLAUDE.md "逝者的回响").
 
 5. **Grant starter relic if starter ≥ 18**
    - `ls samples/01-loot-relics/Relics/*.md` → pick one deterministically:
