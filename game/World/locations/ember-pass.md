@@ -5,7 +5,7 @@ region: South Marches
 danger: 2
 state: unexplored
 inhabitants: ["[[wandering-herbalist]]"]
-exits: ["[[south-marches-village]]", "[[waypost-records]]"]
+exits: ["[[south-marches-village]]", "[[waypost-records]]", "[[south-marches-circuit]]"]
 first_entered_by: null
 first_entered_on: null
 tags: [location, road]

@@ -3,9 +3,12 @@ date: 2026-04-14
 tier: expedition
 character: "[[xue-chi]]"
 location: "[[ember-pass]]"
-turns: 0
+turns: 10
 max_turns: 15
-status: in-progress
+status: survived
+outcome: "取得文书039副本，知灰烬军团解散令真伪存档，购真话瓶"
+loot_gained: ["[[shard-of-held-sighs]]", "[[heavy-of-detours]]", "[[whisper-of-burning-questions]]"]
+xp_gained: 60
 ---
 
 # 焰隘 · 薛迟
@@ -104,3 +107,17 @@ status: in-progress
 `[Mind 4 + d20=17 = 21 vs DC 13] 成功`（交易）
 
 往左找往右看，她从右前方一块焦树桩后面站起来，眼睛盯着他外套下的轮廓。「那个东西，你不打算卖？」不卖。买了那瓶雾里说实话的小瓶，五金。她把瓶递过来：「你去过北边？」没等回答，转身走进了石缝。
+
+## 结算
+
+```
+XP = 10×2 + 5×3 + 5×5 = 20 + 15 + 25 = 60
+```
+
+- 回合：10/15（提前收场）
+- 成功判定：5 次
+- 关键发现：5 条（waypost-records / 039文书内容 / 签收人霍 / 草药师 / 南境行台）
+- HP 剩余：11/11（无伤）
+- 战利品：[[shard-of-held-sighs]]（039副本）· [[heavy-of-detours]]（真话瓶）· [[whisper-of-burning-questions]]
+
+回到村里，天快黑了。Brann 已经把椅子搬进去了。薛迟把档案副本摊在桌上，用手指指了两行，没有说话。Brann 看了很久，把椅子往桌旁推了一下，坐下来。
