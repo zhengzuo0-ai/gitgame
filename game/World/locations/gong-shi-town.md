@@ -3,12 +3,12 @@ type: location
 slug: gong-shi-town
 region: East Circuit Road
 danger: 3
-state: unknown
+state: entered
 tag: settlement
 inhabitants: []
 exits: ["[[south-marches-village]]"]
-first_entered_by: null
-first_entered_on: null
+first_entered_by: "[[xue-chi]]"
+first_entered_on: 2026-04-14
 tags: [location]
 ---
 
