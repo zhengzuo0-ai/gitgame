@@ -6,7 +6,7 @@ danger: 0
 state: safe
 tag: safe
 inhabitants: ["[[innkeeper-brann]]"]
-exits: ["[[ember-pass]]", "[[crypt-of-mist]]", "[[north-relay]]"]
+exits: ["[[ember-pass]]", "[[crypt-of-mist]]", "[[north-relay]]", "[[gong-shi-town]]"]
 first_entered_by: null
 first_entered_on: null
 tags: [location, base]

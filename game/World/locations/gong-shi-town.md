@@ -6,7 +6,7 @@ danger: 3
 state: unknown
 tag: settlement
 inhabitants: []
-exits: []
+exits: ["[[south-marches-village]]"]
 first_entered_by: null
 first_entered_on: null
 tags: [location]
