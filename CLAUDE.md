@@ -81,9 +81,10 @@
 1. 运行 `git rev-parse HEAD` 取当前 SHA（记住它，本回合内复用）。
 2. 对每次判定调用：
    ```bash
-   python .claude/scripts/dice.py <SHA> <turn> <label>
+   bash .claude/scripts/py.sh .claude/scripts/dice.py <SHA> <turn> <label>
    ```
-   得到一个 1–20 的整数。
+   得到一个 1–20 的整数。`py.sh` 是跨平台 Python 包装器，自动选 `py` / `python3` / `python` 中能用的那个，
+   并跳过 Windows 的 Microsoft Store 占位符。**不要**直接调 `python` 或 `python3`——会在 Windows 上失败。
 3. **label 命名规则**（固定命名空间）：
    - `perceive-<对象>` — 感知判定（看、听、察觉）
    - `attack-<敌人>-<N>` — 攻击（N 是本场景第几次攻击这个敌人）

@@ -60,7 +60,7 @@ if [ -z "$fallen_block" ]; then
 fi
 
 # Replace markers via python (handles multiline + special chars safely)
-python3 - "$alive_block" "$fallen_block" <<'PYEOF'
+bash "$(git rev-parse --show-toplevel)/.claude/scripts/py.sh" - "$alive_block" "$fallen_block" <<'PYEOF'
 import sys, re, pathlib
 alive, fallen = sys.argv[1], sys.argv[2]
 p = pathlib.Path("README.md")

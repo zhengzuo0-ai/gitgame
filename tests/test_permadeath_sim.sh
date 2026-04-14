@@ -63,7 +63,7 @@ fi
 mv "$ALIVE" "$GRAVE"
 
 # 3b. Edit YAML — change tags + add death fields
-python3 - "$GRAVE" <<'PYEOF'
+bash .claude/scripts/py.sh - "$GRAVE" <<'PYEOF'
 import re, sys
 p = sys.argv[1]
 with open(p) as f:

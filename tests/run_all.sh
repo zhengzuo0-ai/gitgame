@@ -5,6 +5,8 @@
 set -u
 cd "$(git rev-parse --show-toplevel)"
 
+PY="bash $(git rev-parse --show-toplevel)/.claude/scripts/py.sh"
+
 PASS=0
 FAIL=0
 FAILURES=()
@@ -20,14 +22,14 @@ _fail() {
 }
 
 # ---- 1. Dice unit tests ----
-if python tests/test_dice.py > /tmp/gitgame-dice.log 2>&1; then
+if $PY tests/test_dice.py > /tmp/gitgame-dice.log 2>&1; then
     _pass "dice-unit-tests"
 else
     _fail "dice-unit-tests" "$(cat /tmp/gitgame-dice.log)"
 fi
 
 # ---- 1b. Dice distribution uniformity (10000 samples, χ² approximation) ----
-if python3 - <<'PYEOF' > /tmp/gitgame-dist.log 2>&1
+if $PY - <<'PYEOF' > /tmp/gitgame-dist.log 2>&1
 import sys, os
 sys.path.insert(0, '.claude/scripts')
 from dice import roll
@@ -101,7 +103,7 @@ else
 fi
 
 # ---- 6. dice.py runs with CLI forms ----
-if python .claude/scripts/dice.py abc123 1 test > /tmp/gitgame-cli.log 2>&1; then
+if $PY .claude/scripts/dice.py abc123 1 test > /tmp/gitgame-cli.log 2>&1; then
     OUT=$(cat /tmp/gitgame-cli.log)
     if [[ "$OUT" =~ ^[0-9]+$ ]] && [ "$OUT" -ge 1 ] && [ "$OUT" -le 20 ]; then
         _pass "dice-cli-4arg-form"
@@ -152,7 +154,7 @@ else
 fi
 
 # ---- 10. loot-seeds.json is valid JSON with required keys ----
-if python3 -c "
+if $PY -c "
 import json, sys
 d = json.load(open('.claude/scripts/loot-seeds.json'))
 for k in ('slots', 'prefixes', 'suffixes', 'attribute_lines'):
@@ -182,7 +184,7 @@ else
 fi
 
 # ---- 11a00. All .md files with frontmatter have STRICTLY valid YAML ----
-if python3 - <<'PYEOF' > /tmp/gitgame-yaml.log 2>&1
+if $PY - <<'PYEOF' > /tmp/gitgame-yaml.log 2>&1
 import sys, os, re
 # Lightweight YAML validator without PyYAML dep — uses a subset parser.
 # For strictness, try PyYAML first; fall back to basic sanity if unavailable.
@@ -386,17 +388,20 @@ else
 fi
 
 # ---- 12c. Loot generator runs deterministically + output is valid structure ----
-if python3 - <<'PYEOF' > /tmp/gitgame-loot-structure.log 2>&1
-import subprocess, re
-out_a = subprocess.check_output(['python', '.claude/scripts/generate-loot.py', 'abc123', '5', '1', 'rare']).decode()
-out_b = subprocess.check_output(['python', '.claude/scripts/generate-loot.py', 'abc123', '5', '1', 'rare']).decode()
+if $PY - <<'PYEOF' > /tmp/gitgame-loot-structure.log 2>&1
+import subprocess, re, sys
+PY = sys.executable
+def _run(*args):
+    return subprocess.check_output([PY, *args]).decode().replace('\r\n', '\n')
+out_a = _run('.claude/scripts/generate-loot.py', 'abc123', '5', '1', 'rare')
+out_b = _run('.claude/scripts/generate-loot.py', 'abc123', '5', '1', 'rare')
 assert out_a == out_b, 'not deterministic'
-out_c = subprocess.check_output(['python', '.claude/scripts/generate-loot.py', 'abc123', '5', '1', 'legendary']).decode()
+out_c = _run('.claude/scripts/generate-loot.py', 'abc123', '5', '1', 'legendary')
 assert 'legendary' in out_c
 
 # Structure validation across all rarities
 for rarity in ('common', 'uncommon', 'rare', 'epic', 'legendary'):
-    out = subprocess.check_output(['python', '.claude/scripts/generate-loot.py', 'deadbeef', '7', '3', rarity]).decode()
+    out = _run('.claude/scripts/generate-loot.py', 'deadbeef', '7', '3', rarity)
     # Must have YAML frontmatter (may be preceded by slug comment)
     assert re.search(r'^---\n.*?\n---\n', out, re.DOTALL | re.MULTILINE), f'{rarity}: no YAML block'
     # Must include required YAML fields

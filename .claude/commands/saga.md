@@ -16,7 +16,7 @@ Read `expedition.md` first. The deltas:
 - **Boss turn**: at least one designated "boss turn" mid-saga. On this turn, any damage dealt **doubles**, and any failed save can knock HP in one roll from full to lethal. The GM declares the boss turn with a short line like `[风暴之眼]` before narrating it.
 - **Cannot be interrupted by /rest** — but every 10 turns you must write a `## 章节 N` section and `git commit -m "saga chapter N: <title>"`. This is a **forced save-point**. If the player exits mid-saga, resuming means loading the last chapter's state.
 - **Loot tier**: generous
-  - `loot_d20 = python .claude/scripts/dice.py $SHA 999 loot-drop`
+  - `loot_d20 = bash .claude/scripts/py.sh .claude/scripts/dice.py $SHA 999 loot-drop`
   - 1..3   → 1 uncommon
   - 4..12  → 2 items (mix of uncommon + rare)
   - 13..18 → 2 items, at least 1 rare, maybe epic

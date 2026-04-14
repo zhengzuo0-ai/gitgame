@@ -3,7 +3,21 @@
 set -u
 # Don't set -e: we want the hook to be lenient. A broken hook must never block a session.
 
-repo_root=$(git rev-parse --show-toplevel 2>/dev/null) || exit 0
+repo_root=$(git rev-parse --show-toplevel 2>/dev/null)
+if [ -z "$repo_root" ]; then
+    # Self-repair: not in a git repo. Init silently if a CLAUDE.md is present
+    # (so we know this is a gitgame checkout, not just any random cwd).
+    if [ -f "CLAUDE.md" ] && [ -d ".claude" ]; then
+        git init -q 2>/dev/null || exit 0
+        [ -z "$(git config user.name 2>/dev/null)" ] && git config user.name "gitgame player"
+        [ -z "$(git config user.email 2>/dev/null)" ] && git config user.email "player@gitgame.local"
+        git add -A 2>/dev/null
+        git commit -q -m "Initial commit" 2>/dev/null || true
+        repo_root=$(git rev-parse --show-toplevel 2>/dev/null) || exit 0
+    else
+        exit 0
+    fi
+fi
 cd "$repo_root" || exit 0
 
 # Count alive + fallen (ignore .gitkeep)
