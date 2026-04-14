@@ -80,6 +80,7 @@ README.md                      # 本文件
   hooks/session-start.sh       # 进会话时打招呼
   scripts/
     dice.py                    # 确定性 d20
+    generate-loot.py           # 确定性战利品生成器
     readme-update.sh           # 同步在世/已逝到 README
     loot-seeds.json            # 20 prefix × 20 suffix × 15 attr
 game/
