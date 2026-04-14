@@ -13,7 +13,7 @@ attributes:
   mind: 4
   edge: 5
   luck: 4
-inventory: ["[[crooked-of-the-locked-door]]", "[[torn-of-echoes]]", "[[ash-of-the-forgetting]]", "[[shard-of-held-sighs]]", "[[heavy-of-detours]]", "[[whisper-of-burning-questions]]"]
+inventory: ["[[crooked-of-the-locked-door]]", "[[torn-of-echoes]]", "[[ash-of-the-forgetting]]", "[[shard-of-held-sighs]]", "[[heavy-of-detours]]", "[[whisper-of-burning-questions]]", "[[shard-of-the-asker]]"]
 gold: 3
 expeditions_survived: 2
 created: 2026-04-14
