@@ -5,9 +5,9 @@ class: Ashen Soldier
 level: 2
 xp: 66
 xp_to_next: 500
-hp: 8
+hp: 11
 hp_max: 11
-status: ["cold-light", "shaken-light"]
+status: []
 attributes:
   body: 1
   mind: 4
@@ -18,6 +18,7 @@ gold: 3
 expeditions_survived: 3
 created: 2026-04-14
 last_rested: 2026-04-14
+
 last_played: 2026-04-14
 last_seen_at: "[[south-marches-village]]"
 tags: [character, alive]
