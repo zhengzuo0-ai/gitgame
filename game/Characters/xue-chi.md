@@ -5,9 +5,9 @@ class: Ashen Soldier
 level: 2
 xp: 144
 xp_to_next: 500
-hp: 9
+hp: 11
 hp_max: 11
-status: ["shaken-light"]
+status: []
 attributes:
   body: 1
   mind: 4
