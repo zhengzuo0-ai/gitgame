@@ -1,0 +1,17 @@
+Playtest complete. Here's the summary:
+
+**Run 20260414-3** — Skirmish at Ember Pass
+
+- **Character**: 沈雾 (Mist-Bound, rare class), b2/m3/e2/l4, HP 12/12
+- **Outcome**: Survived, 5 turns, no damage taken
+- **Loot**: Patient Vest "of Cold Breath" (common chest piece)
+- **XP**: +25
+
+**Key findings**:
+- All mechanics worked correctly: dice determinism, commit-per-turn, loot generation, attribute bonuses
+- Narrative quality was good — concise, sensory, no emoji or mind-reading
+- No bugs found
+- Minor friction: loot appearing in resolution despite failed in-narrative searches feels slightly disconnected; wandering-herbalist NPC from location file was never encountered (untested path)
+- 9 dice rolls across 5 turns, all using proper format and label conventions
+
+Report saved to `playtests/runs/20260414-3/report.md` and committed.

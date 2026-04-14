@@ -1,0 +1,17 @@
+Playtest complete. Here's a summary:
+
+**Character**: 沈霭 (Mist-Bound) — b2/m3/e2/l4, HP 12
+
+**Skirmish at Ember Pass** — 5 turns, survived with 5 HP
+- Terrible early luck (d20 rolls of 3, 1, 3, 4, 9) led to wolf bites taking her from 12 to 5 HP
+- Clever use of the wrecked cart for cover (Edge 21 vs DC 13)
+- Natural 20 on the final turn to drive off the pack with a crowbar
+- Earned: Ringlet of the Wandering Mind (common waist), 25 XP
+
+**Key findings in report**:
+1. **Bug**: Turn 5 was merged with resolution commit (should be separate)
+2. **Bug**: Label namespace has no slot for non-verbal animal intimidation
+3. **Friction**: Damage calculation is entirely ad-hoc — no formula in rules
+4. **Positive**: Dice system produces genuine drama; scene-setting is atmospheric; loot names from seed tables are evocative
+
+Report saved to `playtests/runs/20260414-2/report.md` and committed.

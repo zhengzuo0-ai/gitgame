@@ -1,0 +1,19 @@
+Playtest complete. Here's the summary:
+
+**Run 20260414-1** - Skirmish at Ember Pass
+
+- **Character**: 沈渡 (Mist-Bound), b2/m3/e2/l4, HP 12
+- **Outcome**: Survived, 5/5 turns, 0 loot, +20 XP
+- **Commits**: 8 total (character, start, 5 turns, end) - all with correct format
+
+**Key findings**:
+- Dice mechanics worked correctly across 6 rolls, all formatted per spec
+- Narrative quality was good - concise, sensory, no emoji or mind-reading
+- Commit-per-turn discipline maintained throughout
+
+**Bugs found**:
+1. Location file `ember-pass.md` never updated with `state: entered` / `first_entered_by` on first visit
+2. Damage amounts are narratively improvised - no documented damage system exists
+3. Wandering herbalist NPC never encountered (untested NPC system)
+
+**Not tested** (would need expedition/saga runs): death/permadeath, loot generation, NPC dialog with `「」`, `/rest` mid-adventure, floor rules.
