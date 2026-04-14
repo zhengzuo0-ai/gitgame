@@ -7,7 +7,7 @@ xp: 148
 xp_to_next: 300
 hp: 8
 hp_max: 11
-status: ["cold-light"]
+status: ["cold-light", "shaken-light"]
 attributes:
   body: 1
   mind: 4
