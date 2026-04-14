@@ -5,7 +5,7 @@ class: Ashen Soldier
 level: 1
 xp: 148
 xp_to_next: 300
-hp: 11
+hp: 8
 hp_max: 11
 status: ["cold-medium"]
 attributes:
