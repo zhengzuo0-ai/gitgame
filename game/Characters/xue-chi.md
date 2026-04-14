@@ -17,6 +17,7 @@ inventory: ["[[crooked-of-the-locked-door]]", "[[torn-of-echoes]]", "[[ash-of-th
 gold: 8
 expeditions_survived: 1
 created: 2026-04-14
+last_rested: 2026-04-14
 last_played: 2026-04-14
 tags: [character, alive]
 ---
