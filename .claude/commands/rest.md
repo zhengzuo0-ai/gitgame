@@ -36,9 +36,15 @@ If preconditions fail → explain and suggest nearest safe location based on `ex
    - Change YAML to `status: retreated`, `outcome: survived-retreat`.
    - Note: retreated expeditions do NOT give normal loot/xp. Partial XP = floor(xp_potential / 2).
 
-5. **Narrate** 2–4 sentences: the inn's smell, the bed, maybe one line of NPC dialogue from the innkeeper.
+5. **Read the base location's NPCs** before narrating. For every entry in `inhabitants:`,
+   open `game/World/npcs/<slug>.md` and pick up their voice, quirks, and `disposition`.
+   At least one of them should appear in the rest scene (briefly), but **the NPC must speak ≤ 3 sentences total** —
+   a single line of dialog plus at most a small bit of stage business. The inn is not a tavern of exposition.
+   If a card is missing for an inhabitant, generate it now (see CLAUDE.md 叙事触发器 first-time NPC rule).
 
-6. **Commit**
+6. **Narrate** 2–4 sentences: the inn's smell, the bed, maybe one line of NPC dialogue from the innkeeper (counting toward the ≤3-sentence NPC budget).
+
+7. **Commit**
    ```bash
    git add -A
    git commit -m "rest: <name> recovered at <location>"
