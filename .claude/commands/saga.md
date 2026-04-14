@@ -13,16 +13,16 @@ Read `expedition.md` first. The deltas:
 - **Max turns: 40**.
 - **DC range: 14–20**. Even trivial rolls in a saga tend toward 13+.
 - **Death probability**: ~35% (compared to ~15% for expedition, ~5% for skirmish). The Saga is **dangerous**.
-- **Boss turn**: at least one designated "boss turn" mid-saga. On this turn, any damage dealt **doubles**, and any failed save can knock HP in one roll from full to lethal. The GM declares the boss turn with a short line like `[风暴之眼]` before narrating it.
+- **Boss turn**: at least one designated "boss turn" mid-saga. On this turn, any damage dealt **doubles** (capped at 75% of hp_max — see CLAUDE.md "Saga 致命一击上限"), and any failed save can deal massive damage in a single roll. The GM declares the boss turn with a short line like `[风暴之眼]` before narrating it.
 - **Cannot be interrupted by /rest** — but every 10 turns you must write a `## 章节 N` section and `git commit -m "saga chapter N: <title>"`. This is a **forced save-point**. If the player exits mid-saga, resuming means loading the last chapter's state.
 - **Loot tier**: generous
   - `loot_d20 = python3 .claude/scripts/dice.py $SHA 999 loot-drop`
-  - 1..3   → 1 uncommon
+  - 1..3   → **floor to 4** (保底: 2 items uncommon+rare)
   - 4..12  → 2 items (mix of uncommon + rare)
   - 13..18 → 2 items, at least 1 rare, maybe epic
   - 19..20 → 1 legendary ★ (rare event, write epic flavor)
   - Roll additional items independently using `.claude/scripts/loot-seeds.json`.
-- **XP**: 150–400.
+- **XP**: 150–400 (survival guarantees at least 80 XP — see CLAUDE.md "奖励保底").
 - **Location unlocks**: always 1, often 2. Plus a **plot hook** (a new NPC or a 1-line rumor about a distant location) — write as `game/World/rumors/<slug>.md`.
 
 ## Chapter save structure

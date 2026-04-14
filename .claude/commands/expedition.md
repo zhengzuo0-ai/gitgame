@@ -13,9 +13,9 @@ Read `skirmish.md` first (same structure). The deltas:
 - **Max turns: 15** (instead of 5).
 - **DC range: 12–16** (instead of 10–13). Generally tougher decisions.
 - **Can be interrupted**: If player types `/rest` mid-expedition, the `rest` command completes this expedition early as `retreated` (half XP, no loot).
-- **Loot tier**: better
+- **Loot tier**: better (survival guarantees at least 1 common — see CLAUDE.md "奖励保底")
   - `loot_d20 = python3 .claude/scripts/dice.py $SHA 99 loot-drop`
-  - 1..5   → no loot
+  - 1..5   → **floor to 6** (保底: 1 common/uncommon)
   - 6..14  → 1 common/uncommon
   - 15..18 → 2 items, at least 1 uncommon
   - 19..20 → 1 rare (roll second item separately at skirmish-tier)
