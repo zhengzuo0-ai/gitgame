@@ -13,13 +13,14 @@ Read `skirmish.md` first (same structure). The deltas:
 - **Max turns: 15** (instead of 5).
 - **DC range: 12–16** (instead of 10–13). Generally tougher decisions.
 - **Can be interrupted**: If player types `/rest` mid-expedition, the `rest` command completes this expedition early as `retreated` (half XP, no loot).
-- **Loot tier**: better
+- **Loot tier**: better. Use `generate-loot.py` for every item; **never hand-write Loot.**
   - `loot_d20 = bash .claude/scripts/py.sh .claude/scripts/dice.py $SHA 99 loot-drop`
-  - 1..5   → no loot
+  - 1..5   → no item, **rumor guaranteed** (write `game/World/rumors/<slug>.md` — see skirmish.md step 2b)
   - 6..14  → 1 common/uncommon
   - 15..18 → 2 items, at least 1 uncommon
   - 19..20 → 1 rare (roll second item separately at skirmish-tier)
-- **XP**: 40–100 depending on turns + climax.
+  - Every item must end up as `game/Loot/<slug>.md` with `acquired_at` + `acquired_from` and be appended to `inventory`. Skipping the file is forbidden.
+- **XP**: use the CLAUDE.md formula (`turns*2 + successes*3 + discoveries*5`); typical expedition lands at 50–110.
 - **Location unlock**: 50% chance to reveal a new adjacent location:
   - `unlock_d20 = bash .claude/scripts/py.sh .claude/scripts/dice.py $SHA 99 unlock`  — ≥ 11 means unlock
   - If unlocked: generate a new `game/World/locations/<new-slug>.md` with YAML + 3-sentence description. Add `exits: ["[[<cur-loc>]]"]` to the new one; append `"[[<new-loc>]]"` to current location's `exits`.

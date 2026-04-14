@@ -197,12 +197,44 @@ Name of the Item
 
 ---
 
-## 叙事触发器
+## 叙事触发器（数据完整性铁律）
 
-- **玩家首次见到某 NPC** → 读 `game/World/npcs/<npc>.md` 取人格，写入 `known_to: [<character-slug>]` 字段（首次见面）。
+任何叙事变更必须在**本回合 commit 前**落盘到对应文件。叙事是临时的，文件是规范的——没写进文件的事等于没发生。
+
+- **玩家首次见到某 NPC** → 立刻读 `game/World/npcs/<npc>.md`：
+  - 文件**存在** → 取 `disposition` / `attributes` / 说话风格，写入 `known_to: [<character-slug>]`
+  - 文件**不存在** → **必须立刻生成** `game/World/npcs/<slug>.md`（YAML 必填 `slug` `type: npc` `disposition` `location` `attributes` `known_to`，正文 ≤ 4 句人格白描）。**不允许** GM 即兴塑造一个未落盘的 NPC——下次见面就会人设漂移。
 - **玩家首次进入某地点** → 读 `game/World/locations/<loc>.md`，更新 `state: entered`，如果有 `first_entered_by` 字段为空就填上。
-- **玩家取走石棺 / 箱子里的物品** → 生成 Loot 文件，YAML 加 `acquired_at` `acquired_from`。
-- **NPC 被玩家记住** → 他们也记住玩家。下次相遇加 `recognized` 标记。
+- **地点状态同步**（强制）→ 凡是叙事中改变了地点的事实（门被撬开 / 石棺空了 / 雕像倒了 / 守卫被杀 / 入口被堵），**必须**在 commit 前写回 `locations/<loc>.md` 的 YAML（`state` 字段或新增 `events: [...]`）。下次玩家回到此地必须看到一致的世界。
+- **玩家取走场景物**（石棺 / 箱子 / 尸体 / 桌上 / 暗格里的任何东西）→ **必须**调用
+  `bash .claude/scripts/py.sh .claude/scripts/generate-loot.py $SHA $turn <idx> <rarity>` 生成 8 行 Loot 文本，
+  写入 `game/Loot/<slug>.md`，YAML 加 `acquired_at: YYYY-MM-DD` `acquired_from: "[[<loc-slug>]]"`，
+  并把 `[[<slug>]]` 追加到角色 `inventory`。**不允许** 在叙事里"获得了一把短剑"却没建文件——这条规则是数据完整性的核心。
+- **NPC 被玩家记住** → 他们也记住玩家。下次相遇加 `recognized` 标记到 NPC 的 `known_to`。
+
+---
+
+## XP 公式（强制）
+
+每次冒险结算时，XP 必须按公式算，**不许拍脑袋**：
+
+```
+xp_gained = turns_played * 2
+          + successful_rolls * 3
+          + key_discoveries * 5
+```
+
+- `turns_played` = 本场实际回合数
+- `successful_rolls` = 本场所有"成功"判定的总数（看 `[... vs DC N] 成功` 行计数）
+- `key_discoveries` = 本场首次解锁的世界知识：新地点 / 新 NPC 名字 / 新流言 / 新派系——每条 +5
+
+撤退（`status: retreated`）：上述 XP 减半向下取整。
+死亡：XP 不结算（角色没机会消费它）。
+
+公式写在结算段顶部，让玩家能审计：
+```
+XP = 8*2 + 5*3 + 2*5 = 41
+```
 
 ---
 

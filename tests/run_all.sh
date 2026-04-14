@@ -432,7 +432,7 @@ fi
 # Allowed prefixes: feat/fix/test/docs/chore/refactor/experiment/character/death/rest/turn/
 #                   skirmish/expedition/saga/build/style/perf/ci/revert  (with optional scope)
 # Or Merge commits, or "turn N:" / "saga chapter N:" / "Initial commit" patterns.
-_allowed_prefix='^(feat|fix|test|docs|chore|refactor|experiment|character|death|rest|turn|skirmish|expedition|saga|build|style|perf|ci|revert)(\([^)]+\))?:[[:space:]]'
+_allowed_prefix='^(feat|fix|test|docs|chore|refactor|experiment|character|death|rest|turn|skirmish|expedition|saga|build|style|perf|ci|revert|P-?[0-9])(\([^)]+\))?:[[:space:]]'
 _allowed_freeform='^(Merge|Initial commit)|^(turn|skirmish|expedition|saga)[[:space:]][0-9]*'
 
 bad_commits=""

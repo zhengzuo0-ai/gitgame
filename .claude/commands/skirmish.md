@@ -46,7 +46,12 @@ Arguments: $ARGUMENTS — location slug (e.g., `ember-pass`). Required.
    - DC from CLAUDE.md table (10 simple, 13 standard — skirmish stays in this range).
    - Output forced line: `` `[<Attr> <val> + d20=<d20> = <total> vs DC <dc>] 成功|失败` ``
 5. Narrate outcome in 2–4 sentences. Update character card if HP/status changed.
-6. **End-of-turn commit**:
+6. **State sync (mandatory pre-commit checklist)**:
+   - HP / status / inventory changed → write character card.
+   - Anything in the location changed (door opened, sarcophagus emptied, guard killed, statue toppled) → write `game/World/locations/<loc>.md` (`state` field or new `events: [...]`).
+   - First-time NPC encountered with no card → generate `game/World/npcs/<slug>.md` now.
+   - Item picked up → `game/Loot/<slug>.md` exists (see Resolution step 2).
+7. **End-of-turn commit**:
    - Append dialogue block (player action + rolls + narration) to expedition file.
    - `git add -A && git commit -m "turn $N: <brief description>"`
 
@@ -65,16 +70,24 @@ Arguments: $ARGUMENTS — location slug (e.g., `ember-pass`). Required.
 
 1. Write `## 结算` section with: turns survived, HP remaining, summary.
 2. **Loot roll**: `loot_d20 = bash .claude/scripts/py.sh .claude/scripts/dice.py $SHA 99 loot-drop`
-   - 1..10 → no loot
+   - 1..5  → **no loot, but a rumor is guaranteed** (see step 2b)
+   - 6..10 → no loot, no rumor
    - 11..18 → 1 common item
    - 19..20 → 1 uncommon item
-   - For each item, generate 8-line Loot text using `.claude/scripts/loot-seeds.json`:
-     - slot: `bash .claude/scripts/py.sh .claude/scripts/dice.py $SHA 99 loot-slot` mod 8 → index into slots[]
-     - prefix: `bash .claude/scripts/py.sh .claude/scripts/dice.py $SHA 99 loot-prefix` mod 20
-     - suffix: `bash .claude/scripts/py.sh .claude/scripts/dice.py $SHA 99 loot-suffix` mod 20
-     - 3 attribute lines: pick 3 distinct indexes similarly
-   - Write `game/Loot/<item-slug>.md` with YAML + 8 lines + 40–80 char flavor paragraph.
-3. **XP**: skirmish gives 15–30 XP based on turns + outcome.
+   - For each item, **call the loot generator** (do NOT hand-write the 8 lines):
+     ```bash
+     bash .claude/scripts/py.sh .claude/scripts/generate-loot.py $SHA 99 <idx> <rarity>
+     ```
+     Capture stdout (the `<!-- slug: ... -->` first line gives you the filename slug). Write the rest to
+     `game/Loot/<slug>.md`, then patch the YAML to add `acquired_at: YYYY-MM-DD` and
+     `acquired_from: "[[<loc-slug>]]"`. Append `[[<slug>]]` to the character's `inventory`.
+   - **Skipping the file write is forbidden.** "你拾起一把生锈的短剑" without `game/Loot/*.md` is a data-integrity bug.
+
+2b. **Rumor on dry roll** (loot_d20 ∈ 1..5):
+   - `rumor_d20 = bash .claude/scripts/py.sh .claude/scripts/dice.py $SHA 99 rumor`
+   - Generate `game/World/rumors/<slug>.md` — a short YAML (`slug`, `heard_at: "[[<loc>]]"`, `heard_from: <npc-slug or "wind">`, `tags: [rumor]`) + 1–2 sentences hinting at a distant location, NPC, or faction. This is the "出行必有所得" floor: even a failed expedition yields *something*.
+
+3. **XP**: use the formula in CLAUDE.md (`turns*2 + successes*3 + discoveries*5`). Skirmish typically lands at 15–35.
 4. Update character card: `xp`, `expeditions_survived`, `last_played`, potentially `status`.
 5. Change expedition YAML: `status: survived`, `outcome: <brief>`, fill `turns`, `loot_gained: [...]`, `xp_gained`.
 6. Commit: `git commit -m "skirmish end: <name> survived <loc> (turn N)"`.
