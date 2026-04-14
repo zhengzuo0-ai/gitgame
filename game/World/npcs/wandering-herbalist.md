@@ -4,8 +4,8 @@ slug: wandering-herbalist
 location: "[[ember-pass]]"
 disposition: neutral-wary
 role: trader
-known_to: []
-first_met_on: null
+known_to: ["[[xue-chi]]"]
+first_met_on: 2026-04-14
 attributes:
   patience: 5
   insight: 6

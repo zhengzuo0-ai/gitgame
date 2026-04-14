@@ -13,8 +13,8 @@ attributes:
   mind: 4
   edge: 5
   luck: 4
-inventory: ["[[crooked-of-the-locked-door]]", "[[torn-of-echoes]]", "[[ash-of-the-forgetting]]", "[[shard-of-held-sighs]]"]
-gold: 8
+inventory: ["[[crooked-of-the-locked-door]]", "[[torn-of-echoes]]", "[[ash-of-the-forgetting]]", "[[shard-of-held-sighs]]", "[[heavy-of-detours]]"]
+gold: 3
 expeditions_survived: 1
 created: 2026-04-14
 last_rested: 2026-04-14
