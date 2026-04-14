@@ -3,7 +3,7 @@ name: 薛迟
 slug: xue-chi
 class: Ashen Soldier
 level: 2
-xp: 144
+xp: 249
 xp_to_next: 500
 hp: 11
 hp_max: 11
@@ -15,7 +15,7 @@ attributes:
   luck: 4
 inventory: ["[[crooked-of-the-locked-door]]", "[[torn-of-echoes]]", "[[ash-of-the-forgetting]]", "[[shard-of-held-sighs]]", "[[heavy-of-detours]]", "[[whisper-of-burning-questions]]", "[[shard-of-the-asker]]", "[[torn-of-the-asker]]", "[[thorn-of-echoes]]", "[[silent-of-the-open-window]]"]
 gold: 3
-expeditions_survived: 4
+expeditions_survived: 5
 created: 2026-04-14
 last_rested: 2026-04-14
 

@@ -3,12 +3,12 @@ type: location
 slug: south-marches-circuit
 region: South Marches
 danger: 3
-state: unknown
+state: entered
 tag: city
 inhabitants: []
 exits: ["[[ember-pass]]"]
-first_entered_by: null
-first_entered_on: null
+first_entered_by: "[[xue-chi]]"
+first_entered_on: 2026-04-14
 tags: [location]
 ---
 
