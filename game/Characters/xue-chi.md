@@ -14,7 +14,7 @@ attributes:
   edge: 5
   luck: 4
 inventory: []
-gold: 0
+gold: 8
 expeditions_survived: 0
 created: 2026-04-14
 last_played: 2026-04-14
