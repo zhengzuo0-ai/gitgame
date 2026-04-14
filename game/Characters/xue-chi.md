@@ -13,7 +13,7 @@ attributes:
   mind: 4
   edge: 5
   luck: 4
-inventory: []
+inventory: ["[[crooked-of-the-locked-door]]"]
 gold: 8
 expeditions_survived: 0
 created: 2026-04-14
