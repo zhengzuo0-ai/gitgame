@@ -6,7 +6,7 @@ danger: 2
 state: entered
 tag: ruin
 inhabitants: []
-exits: ["[[south-marches-village]]"]
+exits: ["[[south-marches-village]]", "[[ash-camp]]"]
 first_entered_by: "[[xue-chi]]"
 first_entered_on: 2026-04-14
 tags: [location]
